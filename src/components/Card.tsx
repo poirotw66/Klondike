@@ -4,13 +4,16 @@ import { CardType } from '../types';
 interface CardProps {
   card?: CardType;
   isDraggable?: boolean;
+  isDragging?: boolean;
+  isPlayableToFoundation?: boolean;
   onDragStart?: (e: React.DragEvent) => void;
+  onDragEnd?: (e: React.DragEvent) => void;
   onDoubleClick?: () => void;
   className?: string;
   faceDown?: boolean;
 }
 
-export const Card: React.FC<CardProps> = ({ card, isDraggable, onDragStart, onDoubleClick, className = '', faceDown }) => {
+export const Card: React.FC<CardProps> = ({ card, isDraggable, isDragging, isPlayableToFoundation, onDragStart, onDragEnd, onDoubleClick, className = '', faceDown }) => {
   // 蓋牌狀態
   if (!card || faceDown || !card.faceUp) {
     return (
@@ -35,8 +38,9 @@ export const Card: React.FC<CardProps> = ({ card, isDraggable, onDragStart, onDo
     <div
       draggable={isDraggable}
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
-      className={`w-24 h-36 rounded-xl border border-gray-300 bg-white flex flex-col justify-between p-2 shadow-md ${isDraggable ? 'cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-blue-400' : ''} ${isRed ? 'text-red-600' : 'text-gray-900'} ${className}`}
+      className={`w-24 h-36 rounded-xl border border-gray-300 bg-white flex flex-col justify-between p-2 shadow-md ${isDraggable ? 'cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-blue-400' : ''} ${isRed ? 'text-red-600' : 'text-gray-900'} ${isPlayableToFoundation && !isDragging ? 'ring-2 ring-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.6)]' : ''} ${isDragging ? 'opacity-50 ring-4 ring-yellow-400 scale-105 shadow-2xl z-50' : ''} ${className}`}
     >
       {/* 左上角 */}
       <div className="flex flex-col items-center w-6">
